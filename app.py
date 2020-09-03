@@ -20,6 +20,7 @@ def produce_pi(scale):
 
     count = spark.sparkContext.parallelize(
         range(1, n + 1), scale).map(f).reduce(lambda x, y: x + y)
+    print("*********** back from parallelize")
     spark.stop()
     pi = 4.0 * count / n
     return pi
@@ -34,11 +35,14 @@ def index():
 def sparkpi():
     scale = int(request.args.get('scale', 2))
     pi = produce_pi(scale)
+    print("****************** return from produce")
+    print("Pi is roughly {}".format(pi))
     response = "Pi is roughly {}".format(pi)
 
     return response
 
 
 if __name__ == "__main__":
+    print("okay driver is printing")
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
